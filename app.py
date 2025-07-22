@@ -8,7 +8,7 @@ import numpy as np
 
 # Configuration
 st.set_page_config(
-    page_title="📊 University Tuition Dashboard",
+    page_title="University Tuition Dashboard",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -92,20 +92,20 @@ if df.empty:
     st.stop()
 
 # Header
-st.markdown('<h1 class="main-header">🎓 University Tuition Analysis Dashboard</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">University Tuition Analysis Dashboard</h1>', unsafe_allow_html=True)
 st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #666;">Analysis of Computer Engineering and AI Program Tuition Fees</p>', unsafe_allow_html=True)
 
 # Page Navigation
-st.sidebar.header("📍 Navigation")
-page = st.sidebar.radio("Select Page", ["📊 Dashboard", "📋 Data Table"])
+st.sidebar.header("Navigation")
+page = st.sidebar.radio("Select Page", ["Dashboard", "Data Table"], index=0)
 
 # Sidebar Filters
-st.sidebar.header("🎛️ Filter Panel")
+st.sidebar.header("Filter Panel")
 
 # Filter 1: Universities
 universities = ['All'] + sorted(df['university'].unique().tolist())
 selected_universities = st.sidebar.multiselect(
-    "🏫 Select Universities",
+    "Select Universities",
     universities,
     default=['All']
 )
@@ -113,14 +113,14 @@ selected_universities = st.sidebar.multiselect(
 # Filter 2: Program Type
 program_types = ['All'] + sorted(df['program_type'].unique().tolist())
 selected_program_type = st.sidebar.selectbox(
-    "📚 Program Type",
+    "Program Type",
     program_types
 )
 
 # Filter 3: Field
 fields = ['All'] + sorted(df['field'].unique().tolist())
 selected_field = st.sidebar.selectbox(
-    "🔬 Field of Study",
+    "Field of Study",
     fields
 )
 
@@ -128,7 +128,7 @@ selected_field = st.sidebar.selectbox(
 min_tuition = int(df['tuition'].min())
 max_tuition = int(df['tuition'].max())
 tuition_range = st.sidebar.slider(
-    "💰 Tuition Range (Baht)",
+    "Tuition Range (Baht)",
     min_tuition, max_tuition,
     (min_tuition, max_tuition),
     step=1000
@@ -137,7 +137,7 @@ tuition_range = st.sidebar.slider(
 # Filter 5: University Type
 university_types = ['All', 'Public', 'Private']
 selected_uni_type = st.sidebar.selectbox(
-    "🏛️ University Type",
+    "University Type",
     university_types
 )
 
@@ -164,16 +164,16 @@ filtered_df = filtered_df[
 ]
 
 # Page Content
-if page == "📊 Dashboard":
+if page == "Dashboard":
     # Dashboard content
     # Summary Panel
-    st.markdown("## 📋 Summary Statistics")
+    st.markdown("## Summary Statistics")
     col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
         st.markdown(f"""
             <div class="metric-card">
-                <div>📊 Total Programs</div>
+                <div>Total Programs</div>
                 <div style="font-size: 1.75rem";>{len(filtered_df)}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -181,7 +181,7 @@ if page == "📊 Dashboard":
     with col2:
         st.markdown(f"""
             <div class="metric-card">
-                <div>💰 Average Tuition</div>
+                <div>Average Tuition</div>
                 <div style="font-size: 1.75rem";>{filtered_df['tuition'].mean():,.0f} Baht</div>
             </div>
             """, unsafe_allow_html=True)
@@ -189,7 +189,7 @@ if page == "📊 Dashboard":
     with col3:
         st.markdown(f"""
             <div class="metric-card">
-                <div>📈 Highest Tuition</div>
+                <div>Highest Tuition</div>
                 <div style="font-size: 1.75rem";>{filtered_df['tuition'].max():,.0f} Baht</div>
             </div>
             """, unsafe_allow_html=True)
@@ -197,7 +197,7 @@ if page == "📊 Dashboard":
     with col4:
         st.markdown(f"""
             <div class="metric-card">
-                <div>📉 Lowest Tuition</div>
+                <div>Lowest Tuition</div>
                 <div style="font-size: 1.75rem";>{filtered_df['tuition'].min():,.0f} Baht</div>
             </div>
             """, unsafe_allow_html=True)
@@ -205,19 +205,19 @@ if page == "📊 Dashboard":
     with col5:
         st.markdown(f"""
             <div class="metric-card">
-                <div>🎯 Median Tuition</div>
+                <div>Median Tuition</div>
                 <div style="font-size: 1.75rem";>{filtered_df['tuition'].median():,.0f} Baht</div>
             </div>
             """, unsafe_allow_html=True)
 
     # Dashboard Charts
-    st.markdown("## 📊 Data Visualization")
+    st.markdown("## Data Visualization")
 
     # Row 1: Tuition Distribution
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("📈 Panel 1: Tuition Distribution")
+        st.subheader("Panel 1: Tuition Distribution")
         fig_hist = px.histogram(filtered_df, x='tuition', nbins=20, 
                                title="Histogram: Tuition Distribution",
                                labels={'tuition': 'Tuition (Baht)', 'count': 'Count'})
@@ -225,68 +225,59 @@ if page == "📊 Dashboard":
         st.plotly_chart(fig_hist, use_container_width=True)
 
     with col2:
-        st.subheader("📊 Box Plot: Tuition Statistics")
+        st.subheader("Box Plot: Tuition Statistics")
         fig_box = px.box(filtered_df, y='tuition', 
                          title="Box Plot: Tuition Statistics",
                          labels={'tuition': 'Tuition (Baht)'})
         st.plotly_chart(fig_box, use_container_width=True)
 
-# Row 2: University Comparison
-col1, col2 = st.columns(2)
+    # Row 2: University Comparison
+    col1, col2 = st.columns(2)
 
-with col1:
-    st.subheader("🏫 Panel 2: University Comparison")
-    # Top 15 universities by average tuition
-    uni_avg = filtered_df.groupby('university')['tuition'].mean().sort_values(ascending=True).tail(15)
-    
-    # Create DataFrame for plotly
-    uni_df = pd.DataFrame({
-        'university': uni_avg.index,
-        'average_tuition': uni_avg.values
-    })
-    
-    fig_uni = px.bar(uni_df, x='average_tuition', y='university', orientation='h',
-                     title="Average Tuition by University (Top 15)",
-                     labels={'average_tuition': 'Average Tuition (Baht)', 'university': 'University'})
-    fig_uni.update_layout(height=600)
-    st.plotly_chart(fig_uni, use_container_width=True)
-
-with col2:
-    st.subheader("🎯 Scatter Plot: Tuition vs Admission")
-    fig_scatter = px.scatter(filtered_df, x='tuition', y='total_admission',
-                            color='program_type', size='total_admission',
-                            title="Relationship between Tuition and Total Admission",
-                            labels={'tuition': 'Tuition (Baht)', 'total_admission': 'Total Admission'})
-    st.plotly_chart(fig_scatter, use_container_width=True)
-
-# Row 3: Program Type Analysis
-col1, col2 = st.columns(2)
-
-with col1:
-    st.subheader("📚 Panel 3: Program Type Analysis")
-    fig_violin = px.violin(filtered_df, x='program_type', y='tuition',
-                          title="Violin Plot: Tuition Distribution by Program Type",
-                          labels={'program_type': 'Program Type', 'tuition': 'Tuition (Baht)'})
-    st.plotly_chart(fig_violin, use_container_width=True)
+    with col1:
+        st.subheader("Panel 2: University Comparison")
+        # Top 15 universities by average tuition
+        uni_avg = filtered_df.groupby('university')['tuition'].mean().sort_values(ascending=True).tail(15)
+        
+        # Create DataFrame for plotly
+        uni_df = pd.DataFrame({
+            'university': uni_avg.index,
+            'average_tuition': uni_avg.values
+        })
+        
+        fig_uni = px.bar(uni_df, x='average_tuition', y='university', orientation='h',
+                         title="Average Tuition by University (Top 15)",
+                         labels={'average_tuition': 'Average Tuition (Baht)', 'university': 'University'})
+        fig_uni.update_layout(height=600)
+        st.plotly_chart(fig_uni, use_container_width=True)
 
     with col2:
-        st.subheader("🥧 Distribution by Price Range")
+        st.subheader("Scatter Plot: Tuition vs Admission")
+        fig_scatter = px.scatter(filtered_df, x='tuition', y='total_admission',
+                                color='program_type', size='total_admission',
+                                title="Relationship between Tuition and Total Admission",
+                                labels={'tuition': 'Tuition (Baht)', 'total_admission': 'Total Admission'})
+        st.plotly_chart(fig_scatter, use_container_width=True)
+
+    # Row 3: Program Type Analysis
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Panel 3: Program Type Analysis")
+        fig_violin = px.violin(filtered_df, x='program_type', y='tuition',
+                              title="Violin Plot: Tuition Distribution by Program Type",
+                              labels={'program_type': 'Program Type', 'tuition': 'Tuition (Baht)'})
+        st.plotly_chart(fig_violin, use_container_width=True)
+
+    with col2:
+        st.subheader("Distribution by Price Range")
         tuition_cat_counts = filtered_df['tuition_category'].value_counts()
         fig_pie = px.pie(values=tuition_cat_counts.values, names=tuition_cat_counts.index,
                          title="Program Distribution by Price Range")
         st.plotly_chart(fig_pie, use_container_width=True)
 
-    # Row 4: Correlation Analysis
-    st.subheader("🔗 Panel 4: Variable Correlation")
-    admission_cols = ['Round 1 Portfolio', 'Round 2 Quota', 'Round 3 Admission', 'Round 4 Direct Admission', 'tuition']
-    corr_data = filtered_df[admission_cols].corr()
-
-    fig_corr = px.imshow(corr_data, text_auto=True, aspect="auto",
-                         title="Correlation Heatmap: Relationship between Tuition and Admission Rounds")
-    st.plotly_chart(fig_corr, use_container_width=True)
-
-    # Row 5: Field Analysis
-    st.subheader("🔬 Panel 5: Field of Study Analysis")
+    # Row 4: Field Analysis
+    st.subheader("Panel 4: Field of Study Analysis")
     field_stats = filtered_df.groupby('field').agg({
         'tuition': ['mean', 'median', 'min', 'max', 'count']
     }).round(0)
@@ -297,14 +288,14 @@ with col1:
                        labels={'x': 'Field of Study', 'Average': 'Average Tuition (Baht)'})
     st.plotly_chart(fig_field, use_container_width=True)
 
-if page == "📋 Data Table":
+if page == "Data Table":
     # Data Table Page
-    st.markdown("## 📋 Data Table Explorer")
+    st.markdown("## Data Table Explorer")
     st.markdown("Select the columns you want to view and explore the complete dataset.")
     
     # Available columns with Thai descriptions
     column_descriptions = {
-        'url': 'URL ลิงค์',
+        # 'url': 'URL ลิงค์',
         'university': 'มหาวิทยาลัย',
         'faculty': 'คณะ',
         'field': 'สาขาวิชา',
@@ -318,18 +309,19 @@ if page == "📋 Data Table":
         'Round 4 Direct Admission': 'รอบที่ 4 Direct Admission',
         'tuition': 'ค่าเล่าเรียน (บาท)',
         'public_university': 'มหาวิทยาลัยของรัฐ',
-        'total_admission': 'รวมจำนวนรับ (คำนวณ)',
-        'tuition_category': 'หมวดหมู่ค่าเล่าเรียน',
-        'university_type': 'ประเภทมหาวิทยาลัย'
+        'total_admission': 'รวมจำนวนรับ (คำนวณ)'
+        # 'tuition_category': 'หมวดหมู่ค่าเล่าเรียน',
+        # 'university_type': 'ประเภทมหาวิทยาลัย'
     }
     
     # Column selection
-    st.subheader("🎯 Column Selection")
+    st.subheader("Column Selection")
     col1, col2 = st.columns(2)
     
     with col1:
         st.write("**Available Columns:**")
-        available_columns = list(filtered_df.columns)
+        # Filter only columns that are in column_descriptions
+        available_columns = [col for col in filtered_df.columns if col in column_descriptions]
         
         # Default selected columns
         default_columns = ['university', 'program_name', 'field', 'program_type', 'tuition', 'total_admission']
@@ -338,7 +330,7 @@ if page == "📋 Data Table":
             "Select columns to display:",
             available_columns,
             default=[col for col in default_columns if col in available_columns],
-            format_func=lambda x: f"{column_descriptions.get(x, x)} ({x})"
+            format_func=lambda x: column_descriptions.get(x, x)
         )
     
     with col2:
@@ -348,7 +340,7 @@ if page == "📋 Data Table":
         
         # Search functionality
         st.write("**Search & Filter:**")
-        search_term = st.text_input("🔍 Search in data:", "")
+        search_term = st.text_input("Search in data:", "")
     
     if selected_columns:
         # Create display dataframe
@@ -360,7 +352,7 @@ if page == "📋 Data Table":
             display_df = display_df[mask]
         
         # Display statistics
-        st.subheader("📊 Data Summary")
+        st.subheader("Data Summary")
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
@@ -390,7 +382,7 @@ if page == "📋 Data Table":
                 display_df = display_df.iloc[start_idx:end_idx]
         
         # Display the data table
-        st.subheader(f"📋 Data Table ({len(display_df)} records)")
+        st.subheader(f"Data Table ({len(display_df)} records)")
         
         # Column name translation for display
         display_df_renamed = display_df.copy()
@@ -404,28 +396,19 @@ if page == "📋 Data Table":
         )
         
         # Download options
-        st.subheader("📥 Download Data")
-        col1, col2, col3 = st.columns(3)
+        st.subheader("Download Data")
+        col1, col2 = st.columns(2)
         
         with col1:
-            csv = display_df.to_csv(index=False)
-            st.download_button(
-                label="📄 Download as CSV",
-                data=csv,
-                file_name=f"university_data_{'_'.join(selected_columns[:3])}.csv",
-                mime="text/csv"
-            )
-        
-        with col2:
             json_data = display_df.to_json(orient='records', indent=2, force_ascii=False)
             st.download_button(
-                label="📋 Download as JSON",
+                label="Download as JSON",
                 data=json_data,
                 file_name=f"university_data_{'_'.join(selected_columns[:3])}.json",
                 mime="application/json"
             )
         
-        with col3:
+        with col2:
             # Create Excel buffer
             from io import BytesIO
             buffer = BytesIO()
@@ -434,21 +417,15 @@ if page == "📋 Data Table":
             buffer.seek(0)
             
             st.download_button(
-                label="📊 Download as Excel",
+                label="Download as Excel",
                 data=buffer,
                 file_name=f"university_data_{'_'.join(selected_columns[:3])}.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
-        
-        # Column Information
-        with st.expander("ℹ️ Column Information"):
-            st.write("**Column Descriptions:**")
-            for col in selected_columns:
-                st.write(f"• **{col}**: {column_descriptions.get(col, 'No description available')}")
     
     else:
-        st.warning("⚠️ Please select at least one column to display.")
+        st.warning("Please select at least one column to display.")
 
 # Footer (outside the page conditional)
 st.markdown("---")
-st.markdown("📊 **Data Source:** TCAS University Programs | 🛠️ **Built with:** Streamlit + Plotly")
+st.markdown("**Data Source:** TCAS University Programs | **Built with:** Streamlit + Plotly")
