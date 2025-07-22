@@ -1,0 +1,12 @@
+# Web scraping
+playwright==1.41.2
+
+# Data analysis and manipulation
+pandas==2.1.4
+numpy==1.25.2
+
+# Web application framework
+streamlit==1.29.0
+
+# Data visualization
+plotly==5.17.0
