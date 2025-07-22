@@ -7,7 +7,7 @@ from playwright.async_api import async_playwright
 BASE_URL = "https://course.mytcas.com"
 
 async def run():
-    hrefs = Path("link/program_href.txt").read_text(encoding="utf-8").splitlines()
+    hrefs = Path("data/web_scraping/program_hrefs.txt").read_text(encoding="utf-8").splitlines()
     results = []
 
     async with async_playwright() as p:
@@ -53,7 +53,7 @@ async def run():
 
         await browser.close()
 
-    output_path = Path("data/web-scraping/course_data.json")
+    output_path = Path("data/course_data.json")
     output_path.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\n✅ DONE! Saved to {output_path.absolute()}")
 

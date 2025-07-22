@@ -35,7 +35,7 @@ def fetch_courses():
                     for i, href in enumerate(program_hrefs, 1):
                         print(f"{i}. {href}")
 
-                    with open(f"data/web-scraping/program_hrefs_{term}.txt", "w", encoding="utf-8") as f:
+                    with open(f"data/web_scraping/program_hrefs_{term}.txt", "w", encoding="utf-8") as f:
                         for href in program_hrefs:
                             f.write(f"{href}\n")
                 else:
