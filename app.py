@@ -304,8 +304,6 @@ if page == "Data Table":
         'tuition': 'ค่าเล่าเรียน (บาท)',
         'public_university': 'มหาวิทยาลัยของรัฐ',
         'total_admission': 'รวมจำนวนรับ (คำนวณ)'
-        # 'tuition_category': 'หมวดหมู่ค่าเล่าเรียน',
-        # 'university_type': 'ประเภทมหาวิทยาลัย'
     }
     
     # Column selection
