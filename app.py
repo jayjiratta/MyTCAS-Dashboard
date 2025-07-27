@@ -22,7 +22,7 @@ st.markdown("""
         font-weight: bold;
         color: #1f77b4;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 0rem;
     }
     .metric-card {
     background-color: #f8f9fa;
@@ -51,6 +51,23 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         margin-bottom: 1rem;
+    }
+    
+    /* Custom anchor heading for Data Visualization */
+    #data-visualization {
+        border-top: 2px solid #e1e4e8;
+        padding-top: 2rem;
+        margin-top: 2rem;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #1f77b4;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    #data-visualization svg {
+        vertical-align: middle;
+        margin-right: 0.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -168,7 +185,7 @@ if page == "Dashboard":
     # Dashboard content
     # Summary Panel
     st.markdown("## Summary Statistics")
-    col1, col2, col3, col4, col5 = st.columns(5)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         st.markdown(f"""
@@ -189,24 +206,8 @@ if page == "Dashboard":
     with col3:
         st.markdown(f"""
             <div class="metric-card">
-                <div>Highest Tuition</div>
-                <div style="font-size: 1.75rem";>{filtered_df['tuition'].max():,.0f} Baht</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-    with col4:
-        st.markdown(f"""
-            <div class="metric-card">
-                <div>Lowest Tuition</div>
-                <div style="font-size: 1.75rem";>{filtered_df['tuition'].min():,.0f} Baht</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-    with col5:
-        st.markdown(f"""
-            <div class="metric-card">
-                <div>Median Tuition</div>
-                <div style="font-size: 1.75rem";>{filtered_df['tuition'].median():,.0f} Baht</div>
+                <div>Lowest - Highest Tuition</div>
+                <div style="font-size: 1.75rem";>{filtered_df['tuition'].max():,.0f} - {filtered_df['tuition'].min():,.0f} Baht</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -214,7 +215,7 @@ if page == "Dashboard":
     st.markdown("## Data Visualization")
 
     # Row 1: Tuition Distribution
-    col1, col2 = st.columns(2)
+    col1, = st.columns(1)
 
     with col1:
         st.subheader("Panel 1: Tuition Distribution")
@@ -223,13 +224,6 @@ if page == "Dashboard":
                                labels={'tuition': 'Tuition (Baht)', 'count': 'Count'})
         fig_hist.update_layout(showlegend=False)
         st.plotly_chart(fig_hist, use_container_width=True)
-
-    with col2:
-        st.subheader("Box Plot: Tuition Statistics")
-        fig_box = px.box(filtered_df, y='tuition', 
-                         title="Box Plot: Tuition Statistics",
-                         labels={'tuition': 'Tuition (Baht)'})
-        st.plotly_chart(fig_box, use_container_width=True)
 
     # Row 2: University Comparison
     col1, col2 = st.columns(2)
